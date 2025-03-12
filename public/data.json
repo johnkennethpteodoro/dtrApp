@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "username": "kenneth",
+      "email": "kenneth@gmail.com",
+      "password": "password123"
+    }
+  ],
+  "employees": [
+    {
+      "employee_id": 1,
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "position": "Software Engineer",
+      "department": "Engineering",
+      "hire_date": "2020-01-15"
+    }
+  ],
+  "time_records": [
+    {
+      "record_id": 1,
+      "employee_id": 1,
+      "date": "2023-10-01",
+      "time_in": "09:00:00",
+      "time_out": "17:00:00"
+    },
+    {
+      "record_id": 2,
+      "employee_id": 1,
+      "date": "2023-10-02",
+      "time_in": "08:55:00",
+      "time_out": "17:05:00"
+    }
+  ]
+}
