@@ -6,7 +6,7 @@ function Header() {
 			<div className="w-full bg-zinc-800 ">
 				<div className="flex py-5 pt-8 justify-between px-10">
 					<h1 className="text-2xl text-white font-bold">
-						Exam <span className="text-blue-400">track </span>
+						Dtr <span className="text-blue-400">App </span>
 					</h1>
 					<ul className="flex text-white gap-10 font-semibold text-sm">
 						<li>

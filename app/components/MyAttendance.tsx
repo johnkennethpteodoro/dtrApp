@@ -40,12 +40,12 @@ const MyAttendance: React.FC = () => {
 	const isTimeIn = timeRecords.length === 0 || timeRecords[timeRecords.length - 1].timeOut;
 
 	return (
-		<div>
-			<div className="flex justify-between w-full bg-blue-800 py-8 px-5 rounded-t-lg">
+		<div className="bg-white h-full rounded-b-sm pb-5">
+			<div className="flex justify-between w-full bg-blue-800 py-8 px-5 rounded-t-sm">
 				<h1 className="text-white font-bold text-xl">My Attendance</h1>
 				<button
 					onClick={handleTimeInOut}
-					className={`rounded-sm px-4 py-2 ${
+					className={`rounded-sm px-4 font-semibold border py-2 ${
 						isTimeIn ? "bg-white text-black" : "bg-black text-white cursor-pointer"
 					}`}
 				>
@@ -53,25 +53,25 @@ const MyAttendance: React.FC = () => {
 				</button>
 			</div>
 
-			<table className="w-full p-5 bg-white rounded-b-lg">
+			<table className="w-full p-8 bg-white rounded-b-sm ">
 				<thead>
-					<tr className="text-gray-400 text-left">
-						<th className="text-sm font-light px-4 py-2">Date</th>
-						<th className="text-sm font-light px-4 py-2">Time In</th>
-						<th className="text-sm font-light px-4 py-2">Time Out</th>
+					<tr className="text-gray-400 text-left ">
+						<th className="text-[15px] font-medium px-8 py-2 pt-7">Date</th>
+						<th className="text-[15px] font-medium px-8 py-2 pt-7">Time In</th>
+						<th className="text-[15px] font-medium px-8 py-2 pt-7">Time Out</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody className=" align-top">
 					{currentRecords.map((record, index) => (
 						<tr
 							key={record.id}
-							className={`border-b border-gray-300 ${
+							className={`border-b border-gray-300 text-[14px] ${
 								index === currentRecords.length - 1 ? "border-b-0" : ""
 							}`}
 						>
-							<td className="px-4 py-2">{record.date}</td>
-							<td className="px-4 py-2">{record.timeIn}</td>
-							<td className="px-4 py-2">{record.timeOut || "-"}</td>
+							<td className="px-8 py-2">{record.date}</td>
+							<td className="px-8 py-2">{record.timeIn}</td>
+							<td className="px-8 py-2">{record.timeOut || "-"}</td>
 						</tr>
 					))}
 				</tbody>
