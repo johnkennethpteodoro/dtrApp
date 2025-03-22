@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-// import ReCAPTCHA from "react-google-recaptcha";
+import { Clock } from "lucide-react";
 
 function Login() {
 	const router = useRouter();
@@ -91,11 +91,15 @@ function Login() {
 	return (
 		<>
 			<div className="w-[400px]">
-				<h1 className="text-center mb-10 text-2xl text-blue-800 font-semibold w-full ">
-					Exam Track
-				</h1>
 				<div className="bg-white px-7 py-5 rounded-md ">
-					<form onSubmit={handleSubmit}>
+					<div className="flex flex-col items-center justify-center">
+						<div className="mt-8 mb-4">
+							<Clock color="black" size={48} />
+						</div>
+						<h1 className="text-xl font-bold mb-6">TimeAxis</h1>
+					</div>
+
+					<form onSubmit={handleSubmit} className="pb-20">
 						<div>
 							<label htmlFor="email" className="block mb-1 text-sm font-medium">
 								Email
@@ -113,7 +117,7 @@ function Login() {
 
 							<label
 								htmlFor="password"
-								className="block mt-7 mb-1 text-sm font-medium"
+								className="block mt-4 mb-1 text-sm font-medium"
 							>
 								Password
 							</label>
@@ -132,16 +136,10 @@ function Login() {
 						<button
 							type="submit"
 							disabled={loginDisabled}
-							className="mt-8 w-full text-center bg-blue-700 text-white rounded-md py-1 font-medium"
+							className="mt-8 w-full text-center bg-blue-700 text-white rounded-lg py-2 font-medium"
 						>
 							Login
 						</button>
-
-						<h1 className="mb-12 mt-2 text-center">
-							<a href="/" className="text-gray-400 mt-5 text-sm">
-								Forgot Passwword
-							</a>
-						</h1>
 					</form>
 					{loginError && <p style={{ color: "red" }}>{loginError}</p>}
 					{loginAttempts >= 3 && (

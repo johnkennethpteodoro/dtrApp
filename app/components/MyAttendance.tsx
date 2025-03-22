@@ -19,13 +19,13 @@ const MyAttendance: React.FC = () => {
 		const time = now.toLocaleTimeString();
 
 		setTimeRecords((prevRecords) => {
-			const lastRecord = prevRecords[prevRecords.length - 1];
+			const lastRecord = prevRecords[0]; // Check the first record instead of the last
 
 			if (!lastRecord || lastRecord.timeOut) {
-				return [...prevRecords, { id: prevRecords.length + 1, timeIn: time, date }];
+				return [{ id: prevRecords.length + 1, timeIn: time, date }, ...prevRecords]; // Prepend new record
 			} else {
-				return prevRecords.map((record, index) =>
-					index === prevRecords.length - 1 ? { ...record, timeOut: time } : record
+				return prevRecords.map(
+					(record, index) => (index === 0 ? { ...record, timeOut: time } : record) // Update the first record
 				);
 			}
 		});
@@ -40,8 +40,8 @@ const MyAttendance: React.FC = () => {
 	const isTimeIn = timeRecords.length === 0 || timeRecords[timeRecords.length - 1].timeOut;
 
 	return (
-		<div className="bg-white h-full rounded-b-sm pb-5">
-			<div className="flex justify-between w-full bg-blue-800 py-8 px-5 rounded-t-sm">
+		<div className="bg-white h-full rounded-b-xl rounded-t-xl pb-5">
+			<div className="flex justify-between w-full bg-black py-8 px-5 rounded-t-xl">
 				<h1 className="text-white font-bold text-xl">My Attendance</h1>
 				<button
 					onClick={handleTimeInOut}
@@ -55,17 +55,17 @@ const MyAttendance: React.FC = () => {
 
 			<table className="w-full p-8 bg-white rounded-b-sm ">
 				<thead>
-					<tr className="text-gray-400 text-left ">
-						<th className="text-[15px] font-medium px-8 py-2 pt-7">Date</th>
-						<th className="text-[15px] font-medium px-8 py-2 pt-7">Time In</th>
-						<th className="text-[15px] font-medium px-8 py-2 pt-7">Time Out</th>
+					<tr className="text-gray-400 text-left">
+						<th className="text-[15px] font-medium px-8 py-2 pt-5">Date</th>
+						<th className="text-[15px] font-medium px-8 py-2 pt-5">Time In</th>
+						<th className="text-[15px] font-medium px-8 py-2 pt-5">Time Out</th>
 					</tr>
 				</thead>
-				<tbody className=" align-top">
+				<tbody className="align-top">
 					{currentRecords.map((record, index) => (
 						<tr
 							key={record.id}
-							className={`border-b border-gray-300 text-[14px] ${
+							className={`border-b border-black text-[14px] ${
 								index === currentRecords.length - 1 ? "border-b-0" : ""
 							}`}
 						>
