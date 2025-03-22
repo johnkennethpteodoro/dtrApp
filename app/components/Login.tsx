@@ -32,10 +32,9 @@ function Login() {
 					throw new Error("Failed to fetch data");
 				}
 				const jsonData = await response.json();
-				console.log(jsonData);
 				setData(jsonData);
 			} catch (error) {
-				console.log("Failed to fetch");
+				console.log("Failed to fetch", error);
 			}
 		};
 
@@ -47,7 +46,7 @@ function Login() {
 		return regex.test(email);
 	};
 
-	const handleEmailChange = (e: any) => {
+	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setEmail(value);
 		if (!validateEmail(value)) {
@@ -58,7 +57,7 @@ function Login() {
 		updateLoginButton(value, password);
 	};
 
-	const handlePasswordChange = (e: any) => {
+	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setPassword(value);
 		if (value.length < 4) {
