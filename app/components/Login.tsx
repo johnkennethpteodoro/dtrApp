@@ -3,9 +3,19 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Clock } from "lucide-react";
 
+interface User {
+	email: string;
+	password: string;
+	// Add other properties if needed
+}
+
+interface Data {
+	users: User[];
+}
+
 function Login() {
 	const router = useRouter();
-	const [data, setData] = useState(null);
+	const [data, setData] = useState<Data | null>(null);
 	const [loginAttempts, setLoginAttempts] = useState(0);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -77,7 +87,7 @@ function Login() {
 		}
 
 		if (data) {
-			const user = data.users.find((u: any) => u.email === email && u.password === password);
+			const user = data.users.find((u: User) => u.email === email && u.password === password);
 			if (user) {
 				alert("Login successful! Redirecting to home page...");
 				router.push("/employeeDtr");
