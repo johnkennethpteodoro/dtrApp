@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
-
+import { useAuth } from "../context/AuthContext";
 function Header() {
+	const { logout } = useAuth();
 	return (
 		<>
 			<div className="w-full bg-black ">
@@ -16,7 +18,7 @@ function Header() {
 							<a href="">My Account</a>
 						</li>
 						<li>
-							<a href="">Logout</a>
+							<button onClick={() => logout()}>Logout</button>
 						</li>
 					</ul>
 				</div>
