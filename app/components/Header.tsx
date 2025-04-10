@@ -7,7 +7,7 @@ function Header() {
 	return (
 		<>
 			<div className="w-full ">
-				<div className="flex py-4 justify-between items-center border-b border-zinc-300 px-6">
+				<div className="flex py-4 justify-between items-center border-b border-zinc-300 px-6 shadow">
 					<h1 className="text-xl capitalize font-bold">
 						Welcome <span className="">{user?.username}</span>
 					</h1>

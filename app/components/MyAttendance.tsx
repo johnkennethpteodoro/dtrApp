@@ -51,7 +51,7 @@ const MyAttendance: React.FC = () => {
 	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
 	return (
-		<div className="bg-white h-full pb-5">
+		<div className="bg-white h-full pb-5 shadow">
 			<div className="flex justify-between w-full bg-zinc-900 py-4 px-5 items-center">
 				<h1 className="text-white font-bold text-lg">My Attendance</h1>
 				<button

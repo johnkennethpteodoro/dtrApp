@@ -61,7 +61,7 @@ function Login() {
 
 	return (
 		<div className="w-[400px]">
-			<div className="bg-white px-7 py-5 ">
+			<div className="bg-white px-7 py-5 shadow">
 				<div className="flex flex-col items-center justify-center">
 					<div className="mt-8 mb-2">
 						<Clock color="black" size={48} />
