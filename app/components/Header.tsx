@@ -1,4 +1,5 @@
 "use client";
+import { LogOut } from "lucide-react";
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 function Header() {
@@ -12,7 +13,10 @@ function Header() {
 					</h1>
 					<ul className="flex  gap-10 font-semibold text-sm">
 						<li>
-							<button onClick={() => logout()}>Logout</button>
+							<button onClick={() => logout()} className="flex gap-2 items-center">
+								<LogOut color="black" size={18} />
+								<h1>Logout</h1>
+							</button>
 						</li>
 					</ul>
 				</div>
