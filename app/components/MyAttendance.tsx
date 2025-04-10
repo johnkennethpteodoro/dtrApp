@@ -8,6 +8,15 @@ interface TimeRecord {
 	date: string;
 }
 
+const formatDate = (dateString: string) => {
+	const date = new Date(dateString);
+	return date.toLocaleDateString("en-US", {
+		month: "long",
+		day: "numeric",
+		year: "numeric",
+	});
+};
+
 const MyAttendance: React.FC = () => {
 	const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
 	const [currentPage, setCurrentPage] = useState<number>(1);
@@ -19,41 +28,43 @@ const MyAttendance: React.FC = () => {
 		const time = now.toLocaleTimeString();
 
 		setTimeRecords((prevRecords) => {
-			const lastRecord = prevRecords[0]; // Check the first record instead of the last
+			const lastRecord = prevRecords[0]; // Check newest record
 
 			if (!lastRecord || lastRecord.timeOut) {
-				return [{ id: prevRecords.length + 1, timeIn: time, date }, ...prevRecords]; // Prepend new record
+				// Add new Time In at START of array
+				return [{ id: Date.now(), timeIn: time, date }, ...prevRecords];
 			} else {
-				return prevRecords.map(
-					(record, index) => (index === 0 ? { ...record, timeOut: time } : record) // Update the first record
-				);
+				// Update the newest record with Time Out
+				return [{ ...lastRecord, timeOut: time }, ...prevRecords.slice(1)];
 			}
 		});
 	};
 
-	const indexOfLastRecord: number = currentPage * recordsPerPage;
-	const indexOfFirstRecord: number = indexOfLastRecord - recordsPerPage;
-	const currentRecords: TimeRecord[] = timeRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+	const shouldTimeIn = timeRecords.length === 0 || timeRecords[0].timeOut;
+
+	const indexOfLastRecord = currentPage * recordsPerPage;
+	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+	const currentRecords = timeRecords.slice(indexOfFirstRecord, indexOfLastRecord);
 
 	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-	const isTimeIn = timeRecords.length === 0 || timeRecords[timeRecords.length - 1].timeOut;
-
 	return (
-		<div className="bg-white h-full rounded-b-xl rounded-t-xl pb-5">
-			<div className="flex justify-between w-full bg-black py-8 px-5 rounded-t-xl">
-				<h1 className="text-white font-bold text-xl">My Attendance</h1>
+		<div className="bg-white h-full pb-5">
+			<div className="flex justify-between w-full bg-zinc-900 py-4 px-5 items-center">
+				<h1 className="text-white font-bold text-lg">My Attendance</h1>
 				<button
 					onClick={handleTimeInOut}
-					className={`rounded-sm px-4 font-semibold border py-2 ${
-						isTimeIn ? "bg-white text-black" : "bg-black text-white cursor-pointer"
+					className={`px-4 text-[13px] tracking-wider font-extrabold  py-2 ${
+						shouldTimeIn
+							? "bg-white text-black border-black border"
+							: "bg-black text-white border border-white"
 					}`}
 				>
-					{isTimeIn ? "Time In" : "Time Out"}
+					{shouldTimeIn ? "Time In" : "Time Out"}
 				</button>
 			</div>
 
-			<table className="w-full p-8 bg-white rounded-b-sm ">
+			<table className="w-full p-8 bg-white">
 				<thead>
 					<tr className="text-gray-400 text-left">
 						<th className="text-[15px] font-medium px-8 py-2 pt-5">Date</th>
@@ -65,11 +76,11 @@ const MyAttendance: React.FC = () => {
 					{currentRecords.map((record, index) => (
 						<tr
 							key={record.id}
-							className={`border-b border-black text-[14px] ${
+							className={`border-b border-zinc-200 text-[14px] ${
 								index === currentRecords.length - 1 ? "border-b-0" : ""
 							}`}
 						>
-							<td className="px-8 py-2">{record.date}</td>
+							<td className="px-8 py-2">{formatDate(record.date)}</td>
 							<td className="px-8 py-2">{record.timeIn}</td>
 							<td className="px-8 py-2">{record.timeOut || "-"}</td>
 						</tr>
@@ -85,7 +96,11 @@ const MyAttendance: React.FC = () => {
 							<button
 								key={i + 1}
 								onClick={() => paginate(i + 1)}
-								className="mx-1 px-3 py-1 bg-blue-500 text-white rounded"
+								className={`mx-1 px-3 py-1 ${
+									currentPage === i + 1
+										? "bg-zinc-950 text-white"
+										: "bg-gray-200 text-gray-700"
+								}`}
 							>
 								{i + 1}
 							</button>

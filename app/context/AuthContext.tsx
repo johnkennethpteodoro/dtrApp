@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 interface User {
 	email: string;
 	password?: string;
+	username: string;
 }
 
 interface AuthContextType {
@@ -65,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			console.log("Found user:", foundUser);
 
 			if (foundUser) {
-				const userData = { email: foundUser.email };
+				const userData = { email: foundUser.email, username: foundUser.username };
 				setUser(userData);
 				localStorage.setItem("user", JSON.stringify(userData));
 				setLoginAttempts(0);

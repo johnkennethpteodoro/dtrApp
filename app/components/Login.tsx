@@ -53,6 +53,7 @@ function Login() {
 		console.log("Login button clicked");
 		if (loginAttempts >= 3) {
 			alert("Maximum limit of 3 invalid password attempts reached. Please try again later.");
+
 			return;
 		}
 		await login(email, password);
@@ -60,7 +61,7 @@ function Login() {
 
 	return (
 		<div className="w-[400px]">
-			<div className="bg-white px-7 py-5 rounded-xl">
+			<div className="bg-white px-7 py-5 ">
 				<div className="flex flex-col items-center justify-center">
 					<div className="mt-8 mb-2">
 						<Clock color="black" size={48} />
@@ -78,7 +79,7 @@ function Login() {
 							placeholder="Username or Email"
 							value={email}
 							onChange={handleEmailChange}
-							className="border border-gray-200 py-2 px-3 rounded-sm w-full text-sm focus:outline-none"
+							className="border border-gray-200 py-2 px-3  w-full text-sm focus:outline-none"
 						/>
 						{emailError && (
 							<p className="text-sm" style={{ color: "red", marginTop: "5px" }}>
@@ -94,7 +95,7 @@ function Login() {
 							placeholder="Password"
 							value={password}
 							onChange={handlePasswordChange}
-							className="border border-gray-200 py-2 px-3 focus:outline-none rounded-sm w-full text-sm"
+							className="border border-gray-200 py-2 px-3 focus:outline-none w-full text-sm"
 						/>
 						{passwordError && (
 							<p className="text-sm" style={{ color: "red", marginTop: "5px" }}>
@@ -106,7 +107,7 @@ function Login() {
 					<button
 						type="submit"
 						disabled={loginDisabled}
-						className="mt-8 w-full text-center bg-zinc-950 text-white rounded-lg py-2 font-medium "
+						className="mt-8 w-full text-center bg-zinc-950 text-white py-2 font-medium "
 					>
 						Login
 					</button>
