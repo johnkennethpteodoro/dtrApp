@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Modal from "./Modal";
 
 interface TimeRecord {
 	id: number;
@@ -21,6 +22,7 @@ const MyAttendance: React.FC = () => {
 	const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const recordsPerPage: number = 10;
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleTimeInOut = () => {
 		const now = new Date();
@@ -53,7 +55,7 @@ const MyAttendance: React.FC = () => {
 			<div className="flex justify-between w-full bg-zinc-900 py-4 px-5 items-center">
 				<h1 className="text-white font-bold text-lg">My Attendance</h1>
 				<button
-					onClick={handleTimeInOut}
+					onClick={() => setIsModalOpen(true)}
 					className={`px-4 text-[13px] tracking-wider font-extrabold  py-2 ${
 						shouldTimeIn
 							? "bg-white text-black border-black border"
@@ -62,6 +64,17 @@ const MyAttendance: React.FC = () => {
 				>
 					{shouldTimeIn ? "Time In" : "Time Out"}
 				</button>
+				<Modal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					title={` Confirm to ${shouldTimeIn ? "Time In" : "Time Out"}`}
+					shouldTimeIn={shouldTimeIn}
+					onConfirm={handleTimeInOut}
+				>
+					<p className="text-gray-600">
+						Are you sure you want to {shouldTimeIn ? "clock in" : "clock out"} now?
+					</p>
+				</Modal>
 			</div>
 
 			<table className="w-full p-8 bg-white">
@@ -81,8 +94,8 @@ const MyAttendance: React.FC = () => {
 							}`}
 						>
 							<td className="px-8 py-2">{formatDate(record.date)}</td>
-							<td className="px-8 py-2">{record.timeIn}</td>
-							<td className="px-8 py-2">{record.timeOut || "-"}</td>
+							<td className="px-8 py-2 tracking-wider">{record.timeIn}</td>
+							<td className="px-8 py-2 tracking-wider">{record.timeOut || "-"}</td>
 						</tr>
 					))}
 				</tbody>
