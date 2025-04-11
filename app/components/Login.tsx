@@ -76,10 +76,10 @@ function Login() {
 						</label>
 						<input
 							type="text"
-							placeholder="Username or Email"
+							placeholder="Enter your email"
 							value={email}
 							onChange={handleEmailChange}
-							className="border border-gray-200 py-2 px-3  w-full text-sm focus:outline-none"
+							className="border border-gray-200 py-2 px-3  w-full text-sm focus:outline-zinc-950"
 						/>
 						{emailError && (
 							<p className="text-sm" style={{ color: "red", marginTop: "5px" }}>
@@ -92,10 +92,10 @@ function Login() {
 						</label>
 						<input
 							type="password"
-							placeholder="Password"
+							placeholder="Enter your password"
 							value={password}
 							onChange={handlePasswordChange}
-							className="border border-gray-200 py-2 px-3 focus:outline-none w-full text-sm"
+							className="border border-gray-200 py-2 px-3 focus:outline-zinc-950 w-full text-sm"
 						/>
 						{passwordError && (
 							<p className="text-sm" style={{ color: "red", marginTop: "5px" }}>
@@ -125,6 +125,12 @@ function Login() {
 					)}
 				</form>
 			</div>
+			<h1 className="mt-2 text-sm text-center">
+				Already have an account?
+				<a href="/register" className="ms-1 text-zinc-900 underline font-bold">
+					Sign in
+				</a>
+			</h1>
 		</div>
 	);
 }
