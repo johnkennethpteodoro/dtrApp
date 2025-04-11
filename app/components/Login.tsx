@@ -50,7 +50,6 @@ function Login() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log("Login button clicked");
 		if (loginAttempts >= 3) {
 			alert("Maximum limit of 3 invalid password attempts reached. Please try again later.");
 

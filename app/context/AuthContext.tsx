@@ -12,6 +12,7 @@ interface User {
 interface AuthContextType {
 	user: User | null;
 	login: (email: string, password: string) => Promise<boolean>;
+	register: (email: string, password: string, username: string) => Promise<boolean>;
 	logout: () => void;
 	loading: boolean;
 	error: string | null;
@@ -86,6 +87,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		}
 	};
 
+	const register = async (
+		email: string,
+		password: string,
+		username: string
+	): Promise<boolean> => {
+		try {
+			const userExists = usersData.some((user) => user.email === email);
+			if (userExists) {
+				setError("Email already in use");
+				return false;
+			}
+
+			const usernameTaken = usersData.some((u) => u.username === username);
+			if (usernameTaken) {
+				setError("Username already taken");
+				return false;
+			}
+
+			const newUser: User = {
+				email,
+				password,
+				username,
+			};
+
+			const updatedUsersData = [...usersData, newUser];
+			setUsersData(updatedUsersData);
+
+			const userData = { email: newUser.email, username: newUser.username };
+			setUser(userData);
+			localStorage.setItem("user", JSON.stringify(userData));
+			setError(null);
+
+			router.push("/");
+			return true;
+		} catch (err) {
+			console.error("Register error:", err);
+			setError("Register failed. Please try again.");
+			return false;
+		}
+	};
+
 	const logout = () => {
 		setUser(null);
 		localStorage.removeItem("user");
@@ -93,7 +135,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, login, logout, loading, error, loginAttempts }}>
+		<AuthContext.Provider
+			value={{ user, login, logout, register, loading, error, loginAttempts }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);
