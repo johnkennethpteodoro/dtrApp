@@ -11,7 +11,7 @@ function page() {
 
 				<div className="flex-1 overflow-auto">
 					<Header />
-					<div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 grid-cols-1 gap-10 m-5">
+					<div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1 gap-10 m-5">
 						<div className="bg-white h-full pb-5 shadow">
 							<div className="bg-zinc-900 py-4 px-5 ">
 								<h1 className="text-white font-bold text-sm text-center">

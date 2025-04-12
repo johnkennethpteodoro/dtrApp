@@ -2,7 +2,7 @@ import React from "react";
 import { LayoutDashboard, UserPen, Calendar, Clock } from "lucide-react";
 function SideBar() {
 	return (
-		<div className="w-64 bg-white hidden md:block px-7 p-5 shadow">
+		<div className="w-64 bg-white hidden sm:hidden md:hidden xl:block lg:block px-7 p-5 shadow">
 			<div className="flex gap-2 w-full justify-center">
 				<Clock color="black" size={27} />
 				<h2 className="text-xl font-semibold text-center mb-10">TimeAxis</h2>

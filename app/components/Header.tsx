@@ -25,8 +25,8 @@ function Header() {
 						</li>
 					</ul>
 				</div>
-				<div className=" py-3 xl:hidden lg:hidden md:hidden sm:block border-b bg-zinc-100 border-zinc-300 px-5 block">
-					<div className="w-full text-right">
+				<div className=" py-3 xl:hidden lg:hidden md:block sm:block border-b bg-zinc-100 border-zinc-300 px-5 block">
+					<div className="w-full text-right flex justify-end items-center">
 						<button onClick={handleShowMenu}>
 							<Menu color="black" size={18} />
 						</button>
