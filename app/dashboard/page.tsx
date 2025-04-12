@@ -1,4 +1,3 @@
-import React from "react";
 import Header from "../components/Header";
 import MyAttendance from "../components/MyAttendance";
 import ProtectedRoute from "../components/ProtectedRoute";
@@ -13,6 +12,7 @@ function page() {
 
 				<div className="flex-1 overflow-auto">
 					<Header />
+
 					<div className="grid grid-cols-1 xl:grid-cols-3 gap-5 m-5">
 						<div className="col-span-1 xl:col-span-2">
 							<MyAttendance />

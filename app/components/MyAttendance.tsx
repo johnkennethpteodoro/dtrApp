@@ -80,9 +80,15 @@ const MyAttendance: React.FC = () => {
 			<table className="w-full p-8 bg-white">
 				<thead>
 					<tr className="text-gray-400 text-left">
-						<th className="text-[15px] font-medium px-8 py-2 pt-5">Date</th>
-						<th className="text-[15px] font-medium px-8 py-2 pt-5">Time In</th>
-						<th className="text-[15px] font-medium px-8 py-2 pt-5">Time Out</th>
+						<th className="text-[15px] font-medium xl:pl-8 pl-2 text-left py-2 pt-5">
+							Date
+						</th>
+						<th className="text-[15px] font-medium xl:pl-8 pl-2 text-left py-2 pt-5">
+							Time In
+						</th>
+						<th className="text-[15px] font-medium xl:pl-8 pl-2 text-left py-2 pt-5">
+							Time Out
+						</th>
 					</tr>
 				</thead>
 				<tbody className="align-top">
@@ -93,9 +99,15 @@ const MyAttendance: React.FC = () => {
 								index === currentRecords.length - 1 ? "border-b-0" : ""
 							}`}
 						>
-							<td className="px-8 py-2">{formatDate(record.date)}</td>
-							<td className="px-8 py-2 tracking-wider">{record.timeIn}</td>
-							<td className="px-8 py-2 tracking-wider">{record.timeOut || "-"}</td>
+							<td className="text-left xl:pl-8 pl-2 py-2">
+								{formatDate(record.date)}
+							</td>
+							<td className="text-left xl:pl-8 pl-2 py-2 tracking-wider">
+								{record.timeIn}
+							</td>
+							<td className="text-left xl:pl-8 pl-2 py-2 tracking-wider">
+								{record.timeOut || "-"}
+							</td>
 						</tr>
 					))}
 				</tbody>
