@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Clock } from "lucide-react";
@@ -126,9 +127,9 @@ function Login() {
 			</div>
 			<h1 className="mt-2 text-sm text-center">
 				Already have an account?
-				<a href="/register" className="ms-1 text-zinc-900 underline font-bold">
+				<Link href="/register" className="ms-1 text-zinc-900 underline font-bold">
 					Sign in
-				</a>
+				</Link>
 			</h1>
 		</div>
 	);

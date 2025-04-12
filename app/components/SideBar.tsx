@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { LayoutDashboard, UserPen, Calendar, Clock } from "lucide-react";
 function SideBar() {
 	return (
@@ -10,21 +11,21 @@ function SideBar() {
 			<ul className="space-y-5 text-sm">
 				<li className="flex gap-2">
 					<LayoutDashboard color="black" size={18} />
-					<a href="/dashboard" className="hover:underline">
+					<Link href="/dashboard" className="hover:underline">
 						Dashboard
-					</a>
+					</Link>
 				</li>
 				<li className="flex gap-2">
 					<Calendar color="black" size={18} />
-					<a href="/leaveRequest" className=" hover:underline">
+					<Link href="/leaveRequest" className=" hover:underline">
 						Leave Request
-					</a>
+					</Link>
 				</li>
 				<li className="flex gap-2">
 					<UserPen color="black" size={18} />
-					<a href="/myProfile" className="hover:underline">
+					<Link href="/myProfile" className="hover:underline">
 						My Profile
-					</a>
+					</Link>
 				</li>
 			</ul>
 		</div>

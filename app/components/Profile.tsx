@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 function Profile() {
@@ -10,7 +11,7 @@ function Profile() {
 					<div className="bg-white pb-5 shadow \ relative">
 						<div className="bg-zinc-900 h-[150px] px-5">
 							<div className="h-[123px] w-[123px] bg-white top-[90px] rounded-full absolute left-[34px]  flex items-center justify-center">
-								<img
+								<Image
 									src="/me.jpeg"
 									alt="Profile picture"
 									className="h-[120px] w-[120px] rounded-full"
@@ -18,7 +19,7 @@ function Profile() {
 									decoding="async"
 								/>
 							</div>
-							<div className=" bg-zinc-950 text-white rounded-sm py-1.5 px-3 top-[170px] right-[34px] absolute">
+							<div className=" bg-zinc-700 text-white rounded-sm py-1.5 px-3 top-[170px] right-[34px] absolute">
 								<h1 className="text-[12px] font-semibold shadow">
 									<span className="mr-2">🏆</span>Titanium Awardee, Q3 2024
 								</h1>
@@ -95,55 +96,47 @@ function Profile() {
 						</h1>
 
 						<ul className="space-y-1.5">
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Employee ID:</h1>
 								<h1>QX20230401</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Full Name:</h1>
 								<h1>John Kenneth Teodoro</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Position:</h1>
 								<h1>Software Engineer</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Department:</h1>
 								<h1>Engineering Development</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Employment Status:</h1>
 								<h1>Full-time</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Shift Schedule:</h1>
 								<h1>8:00 AM - 5:30 PM</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Immediate Supervisor:</h1>
 								<h1>Liziel Dugaduga</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Company Email:</h1>
 								<h1>jkstrike@company.com</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Contact Number:</h1>
 								<h1>+63 956 469 5206</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Employee Since:</h1>
 								<h1>September 1, 2023</h1>
 							</li>
-							<li className="flex text-[14px] gap-1">
-								<h1 className="font-semibold">Birthday:</h1>
-								<h1>April 1, 2001</h1>
-							</li>
-							<li className="flex text-[14px] gap-1">
-								<h1 className="font-semibold">Age:</h1>
-								<h1>24</h1>
-							</li>
-							<li className="flex text-[14px] gap-1">
+							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Address:</h1>
 								<h1>Commonwealth, Quezon City</h1>
 							</li>

@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useState } from "react";
 import { LogOut } from "lucide-react";
 import { Menu } from "lucide-react";
@@ -35,13 +36,13 @@ function Header() {
 						{showMenu && (
 							<u className="text-sm list-none space-y-1">
 								<li>
-									<a href="/dashboard">Dashboard</a>
+									<Link href="/dashboard">Dashboard</Link>
 								</li>
 								<li>
-									<a href="/leaveRequest">Leave Request</a>
+									<Link href="/leaveRequest">Leave Request</Link>
 								</li>
 								<li>
-									<a href="/myProfile">Profile</a>
+									<Link href="/myProfile">Profile</Link>
 								</li>
 							</u>
 						)}
