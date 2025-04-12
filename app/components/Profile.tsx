@@ -13,6 +13,8 @@ function Profile() {
 							<div className="h-[123px] w-[123px] bg-white top-[90px] rounded-full absolute left-[34px]  flex items-center justify-center">
 								<Image
 									src="/me.jpeg"
+									width={500}
+									height={500}
 									alt="Profile picture"
 									className="h-[120px] w-[120px] rounded-full"
 									loading="lazy"
