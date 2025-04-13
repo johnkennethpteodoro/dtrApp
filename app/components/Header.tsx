@@ -1,15 +1,34 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { LogOut } from "lucide-react";
 import { Menu } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import classNames from "classnames";
 function Header() {
+	const currentPath = usePathname();
 	const { logout, user } = useAuth();
 	const [showMenu, setShowMenu] = useState(false);
 	const handleShowMenu = () => {
 		setShowMenu(!showMenu);
 	};
+
+	const links = [
+		{
+			name: "Dashboard",
+			path: "/dashboard",
+		},
+		{
+			name: "Leave Request",
+			path: "/leaveRequest",
+		},
+		{
+			name: "My Profile",
+			path: "/myProfile",
+		},
+	];
+
 	return (
 		<>
 			<div className="w-full">
@@ -35,15 +54,19 @@ function Header() {
 					<div>
 						{showMenu && (
 							<u className="text-sm list-none space-y-1">
-								<li>
-									<Link href="/dashboard">Dashboard</Link>
-								</li>
-								<li>
-									<Link href="/leaveRequest">Leave Request</Link>
-								</li>
-								<li>
-									<Link href="/myProfile">Profile</Link>
-								</li>
+								{links.map((link) => (
+									<li
+										key={link.path}
+										className={classNames({
+											"text-zinc-900 font-semibold":
+												link.path === currentPath,
+											"text-zinc-500": link.path !== currentPath,
+											"hover:text-zinc-800": true,
+										})}
+									>
+										<Link href={link.path}>{link.name}</Link>
+									</li>
+								))}
 							</u>
 						)}
 					</div>
