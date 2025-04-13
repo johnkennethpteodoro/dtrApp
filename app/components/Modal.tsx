@@ -11,7 +11,6 @@ interface ModalProps {
 }
 
 const Modal = ({ isOpen, onClose, children, title, shouldTimeIn, onConfirm }: ModalProps) => {
-	// Close modal when pressing Escape key
 	useEffect(() => {
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -33,13 +32,12 @@ const Modal = ({ isOpen, onClose, children, title, shouldTimeIn, onConfirm }: Mo
 	return (
 		<div
 			className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50"
-			onClick={onClose} // Close when clicking on backdrop
+			onClick={onClose}
 		>
 			<div
 				className="bg-white  shadow-xl w-full max-w-md"
-				onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+				onClick={(e) => e.stopPropagation()}
 			>
-				{/* Modal header */}
 				<div className="flex justify-between items-center p-4">
 					<h3 className="text-xl font-semibold text-gray-900">{title}</h3>
 					<button onClick={onClose} className="text-gray-400 hover:text-gray-500">

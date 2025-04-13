@@ -97,7 +97,7 @@ function Profile() {
 							Profile Details
 						</h1>
 
-						<ul className="space-y-1.5">
+						<ul className="space-y-2">
 							<li className="flex text-[14px] gap-2">
 								<h1 className="font-semibold">Employee ID:</h1>
 								<h1>QX20230401</h1>

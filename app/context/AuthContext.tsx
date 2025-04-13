@@ -49,7 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 		fetchData();
 
-		// Check if user is already logged in (e.g., from localStorage)
 		const storedUser = localStorage.getItem("user");
 		if (storedUser) {
 			setUser(JSON.parse(storedUser));
