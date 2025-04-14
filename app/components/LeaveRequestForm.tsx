@@ -94,8 +94,26 @@ function LeaveRequestForm() {
 	const today = format(new Date(), "yyyy-MM-dd");
 	const minEndDate = watchStartDate || today;
 
-	const onSubmit = (data: LeaveRequestForm) => {
-		console.log(data);
+	const onSubmit = async (data: LeaveRequestForm) => {
+		try {
+			const response = await fetch("/api/issues", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const responseData = await response.json();
+			console.log("Form submitted successfully:", responseData);
+			return responseData;
+		} catch (error) {
+			console.error("Error submitting form:", error);
+		}
 	};
 
 	return (
@@ -207,9 +225,10 @@ function LeaveRequestForm() {
 						<p className="mt-1 text-sm text-red-600">{errors.reason.message}</p>
 					)}
 				</div>
+
 				<button
 					type="submit"
-					className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+					className="mt-4 px-4 py-2 text-[14px] bg-zinc-950 text-white rounded focus:outline-none"
 				>
 					Submit Leave Request
 				</button>
