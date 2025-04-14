@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { PrismaClient } from "../../generated/prisma";
+
+const prisma = new PrismaClient();
 
 const createIssueSchema = z.object({
 	title: z.string().min(1).max(255),
@@ -26,5 +28,7 @@ export async function POST(request: NextRequest) {
 	} catch (error) {
 		console.error("API Error:", error);
 		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+	} finally {
+		await prisma.$disconnect();
 	}
 }
