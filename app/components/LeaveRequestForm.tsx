@@ -1,90 +1,115 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { format, differenceInDays, isBefore, isToday } from "date-fns";
+import { useForm } from "react-hook-form";
 
-type FormErrors = {
-	startDate?: string;
-	endDate?: string;
-};
+interface LeaveRequestForm {
+	reason: string;
+	leaveType: string;
+	totalDays: number;
+	endDate: string;
+	startDate: string;
+}
 
 function LeaveRequestForm() {
-	const [reason, setReason] = useState("");
-	const [leaveType, setLeaveType] = useState("");
-	const [totalDays, setTotalDays] = useState(0);
-	const [endDate, setEndDate] = useState("");
-	const [startDate, setStartDate] = useState("");
-	const [errors, setErrors] = useState<FormErrors>({});
+	const {
+		register,
+		handleSubmit,
+		watch,
+		setValue,
+		formState: { errors },
+		setError,
+		clearErrors,
+	} = useForm<LeaveRequestForm>({
+		defaultValues: {
+			reason: "",
+			leaveType: "",
+			totalDays: 0,
+			endDate: "",
+			startDate: "",
+		},
+	});
+
+	const watchStartDate = watch("startDate");
+	const watchEndDate = watch("endDate");
+	const watchLeaveType = watch("leaveType");
 
 	useEffect(() => {
-		if (startDate && endDate) {
-			const start = new Date(startDate);
-			const end = new Date(endDate);
+		if (watchStartDate && watchEndDate) {
+			const start = new Date(watchStartDate);
+			const end = new Date(watchEndDate);
 
 			// Calculate total days (inclusive)
 			const days = differenceInDays(end, start) + 1;
-			setTotalDays(days > 0 ? days : 0);
+			setValue("totalDays", days > 0 ? days : 0);
 		} else {
-			setTotalDays(0);
+			setValue("totalDays", 0);
 		}
-	}, [startDate, endDate]);
+	}, [watchStartDate, watchEndDate, setValue]);
 
 	const validateStartDate = (date: string) => {
 		const today = new Date();
 		const selectedDate = new Date(date);
-		const newErrors = { ...errors };
 
-		if (leaveType === "vacation" && isBefore(selectedDate, today) && !isToday(selectedDate)) {
-			newErrors.startDate = "Vacation cannot be scheduled for past dates";
+		if (
+			watchLeaveType === "vacation" &&
+			isBefore(selectedDate, today) &&
+			!isToday(selectedDate)
+		) {
+			setError("startDate", {
+				type: "manual",
+				message: "Vacation cannot be scheduled for past dates",
+			});
+			return false;
 		} else {
-			delete newErrors.startDate;
+			clearErrors("startDate");
+			return true;
 		}
-
-		setErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
 	};
 
 	const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const date = e.target.value;
 		if (validateStartDate(date)) {
-			setStartDate(date);
+			setValue("startDate", date);
 
-			if (!endDate || new Date(endDate) < new Date(date)) {
-				setEndDate(date);
+			if (!watchEndDate || new Date(watchEndDate) < new Date(date)) {
+				setValue("endDate", date);
 			}
 		}
 	};
 
 	const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const date = e.target.value;
-		if (new Date(date) >= new Date(startDate)) {
-			setEndDate(date);
-			setErrors((prev) => ({ ...prev, endDate: "" }));
+		if (new Date(date) >= new Date(watchStartDate)) {
+			setValue("endDate", date);
+			clearErrors("endDate");
 		} else {
-			setErrors((prev) => ({ ...prev, endDate: "End date cannot be before start date" }));
+			setError("endDate", {
+				type: "manual",
+				message: "End date cannot be before start date",
+			});
 		}
 	};
 
-	const handleLeaveTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setLeaveType(e.target.value);
+	const today = format(new Date(), "yyyy-MM-dd");
+	const minEndDate = watchStartDate || today;
+
+	const onSubmit = (data: LeaveRequestForm) => {
+		console.log(data);
 	};
 
-	const today = format(new Date(), "yyyy-MM-dd");
-	const minEndDate = startDate || today;
 	return (
 		<div>
-			<div className="bg-white shadow p-7">
+			<form className="bg-white shadow p-7" onSubmit={handleSubmit(onSubmit)}>
 				<h1 className="font-extrabold capitalize text-[18px] mb-5">Submit Leave Request</h1>
 
 				<div>
 					<label className="block text-sm font-medium text-gray-700">
 						Leave Type <span className="text-red-500">*</span>
 					</label>
-
 					<select
-						value={leaveType}
-						onChange={handleLeaveTypeChange}
 						className="select mt-1 block w-full pl-3 py-2 text-base border border-gray-300 focus:outline-none sm:text-sm"
-						required
+						{...register("leaveType", { required: "Leave type is required" })}
 					>
 						<option value="" disabled>
 							Select leave Type
@@ -94,6 +119,9 @@ function LeaveRequestForm() {
 						<option value="unpaid">Unpaid</option>
 						<option value="emergency">Emergency</option>
 					</select>
+					{errors.leaveType && (
+						<p className="mt-1 text-sm text-red-600">{errors.leaveType.message}</p>
+					)}
 				</div>
 
 				<div className="grid grid-cols-1 xl:grid xl:grid-cols-3 gap-4 mt-5">
@@ -101,20 +129,20 @@ function LeaveRequestForm() {
 						<label className="block text-sm font-medium text-gray-700">
 							Start Date <span className="text-red-500">*</span>
 						</label>
-
 						<input
 							type="date"
 							id="startDate"
-							value={startDate}
-							onChange={handleStartDateChange}
-							min={leaveType === "vacation" ? today : undefined}
+							min={watchLeaveType === "vacation" ? today : undefined}
 							className={`mt-1 block w-full px-3 py-2 border ${
 								errors.startDate ? "border-red-500" : "border-gray-300"
 							} focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-							required
+							{...register("startDate", {
+								required: "Start date is required",
+								onChange: handleStartDateChange,
+							})}
 						/>
 						{errors.startDate && (
-							<p className="mt-1 text-sm text-red-600">{errors.startDate}</p>
+							<p className="mt-1 text-sm text-red-600">{errors.startDate.message}</p>
 						)}
 					</div>
 
@@ -128,16 +156,17 @@ function LeaveRequestForm() {
 						<input
 							type="date"
 							id="endDate"
-							value={endDate}
-							onChange={handleEndDateChange}
 							min={minEndDate}
 							className={`mt-1 block w-full px-3 py-2 border ${
 								errors.endDate ? "border-red-500" : "border-gray-300"
 							} focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-							required
+							{...register("endDate", {
+								required: "End date is required",
+								onChange: handleEndDateChange,
+							})}
 						/>
 						{errors.endDate && (
-							<p className="mt-1 text-sm text-red-600">{errors.endDate}</p>
+							<p className="mt-1 text-sm text-red-600">{errors.endDate.message}</p>
 						)}
 					</div>
 
@@ -150,17 +179,15 @@ function LeaveRequestForm() {
 						</label>
 						<input
 							type="number"
-							value={totalDays}
-							onChange={handleEndDateChange}
 							min="0"
-							className=" mt-1 block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-							required
+							className="mt-1 block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
 							disabled
+							{...register("totalDays")}
 						/>
-						{totalDays > 0 && (
+						{watchStartDate && watchEndDate && watchStartDate && watchEndDate && (
 							<p className="text-xs text-gray-500 mt-1">
-								{format(new Date(startDate), "MMM d, yyyy")} to{" "}
-								{format(new Date(endDate), "MMM d, yyyy")}
+								{format(new Date(watchStartDate), "MMM d, yyyy")} to{" "}
+								{format(new Date(watchEndDate), "MMM d, yyyy")}
 							</p>
 						)}
 					</div>
@@ -172,14 +199,21 @@ function LeaveRequestForm() {
 					</label>
 					<textarea
 						id="reason"
-						value={reason}
-						onChange={(e) => setReason(e.target.value)}
 						rows={3}
 						className="mt-1 block w-full px-3 py-2 border border-gray-300 focus:outline-none sm:text-sm"
-						required
+						{...register("reason", { required: "Reason is required" })}
 					/>
+					{errors.reason && (
+						<p className="mt-1 text-sm text-red-600">{errors.reason.message}</p>
+					)}
 				</div>
-			</div>
+				<button
+					type="submit"
+					className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+				>
+					Submit Leave Request
+				</button>
+			</form>
 		</div>
 	);
 }

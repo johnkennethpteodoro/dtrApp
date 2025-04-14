@@ -32,7 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	// Load user data on initial render
 	useEffect(() => {
 		const fetchData = async () => {
-			console.log("Fetching user data...", usersData);
 			try {
 				const response = await fetch("/data.json");
 				if (!response.ok) {
@@ -63,7 +62,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 		try {
 			const foundUser = usersData.find((u) => u.email === email && u.password === password);
-			console.log("Found user:", foundUser);
 
 			if (foundUser) {
 				const userData = { email: foundUser.email, username: foundUser.username };
