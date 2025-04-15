@@ -1,4 +1,5 @@
 "use client";
+import { Ellipsis } from "lucide-react";
 import Header from "../components/Header";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SideBar from "../components/SideBar";
@@ -78,27 +79,52 @@ function page() {
 							</div>
 						</div>
 						<div className="col-span-1">
-							<div className="bg-white shadow p-7">
-								<h1 className="font-extrabold capitalize text-[18px] mb-5">
-									Leave Record
-								</h1>
-								{leaveRequest.map((leaveRequest) => (
-									<div
-										key={leaveRequest.id}
-										className="bg-gray-100 p-4 mb-4 rounded"
-									>
-										<h2 className="text-lg font-bold">
-											{leaveRequest.leave_type}
-										</h2>
-										<p>
-											{leaveRequest.start_date} - {leaveRequest.end_date}
-										</p>
-										<p>{leaveRequest.reason}</p>
-										<p>Status: {leaveRequest.status}</p>
-										<p>Total Days: {leaveRequest.total_days}</p>
-										<p>Employee Name: {leaveRequest.employee_name}</p>
-									</div>
-								))}
+							<div className="bg-white h-[500px]">
+								<div className="flex justify-between items-center bg-zinc-950 px-4 py-3 text-white">
+									<h1 className="font-bold">Leave Record</h1>
+									<button className="bg-white text-black text-[12px] w-[115px] py-1.5">
+										Select Month
+									</button>
+								</div>
+								<table className="w-full  bg-white border border-zinc-200">
+									<thead>
+										<tr className="text-gray-400 text-left">
+											<th className="text-[14px] font-medium text-left md:pl-5 xl:pl-8 pl-2 py-2 pt-4">
+												Leave Type
+											</th>
+											<th className="text-[14px] md:pl-5 xl:pl-8 pl-2 font-medium  py-2 pt-4">
+												Status
+											</th>
+											<th className="text-[14px] md:pl-5 xl:pl-8 pl-2 font-medium py-2 pt-4">
+												Action
+											</th>
+										</tr>
+									</thead>
+									<tbody className="align-top">
+										{leaveRequest.map((leaveRequest) => (
+											<tr
+												key={leaveRequest.id}
+												className="border-b border-zinc-200"
+											>
+												<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 capitalize text-[13px]">
+													{leaveRequest.leave_type.toLowerCase()}
+												</td>
+												<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 tracking-wider ">
+													<button className="bg-yellow-400 py-1 px-3 text-white text-[11px] capitalize">
+														{leaveRequest.status === "OPEN"
+															? "Pending"
+															: leaveRequest.status.toLowerCase()}
+													</button>
+												</td>
+												<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 tracking-wider ">
+													<button className=" bg-zinc-950 shadow py-1 px-3 rounded-sm">
+														<Ellipsis color="white " size={15} />
+													</button>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
