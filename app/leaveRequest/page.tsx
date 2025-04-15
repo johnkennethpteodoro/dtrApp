@@ -1,9 +1,35 @@
+"use client";
 import Header from "../components/Header";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SideBar from "../components/SideBar";
 import LeaveRequestForm from "../components/LeaveRequestForm";
-
+import { useEffect, useState } from "react";
+import { useSnapshot } from "valtio";
+import { store } from "../_store";
 function page() {
+	const snap = useSnapshot(store);
+	const [leaveRequest, setLeaveRequest] = useState<any[]>([]);
+	useEffect(() => {
+		const fetchLeaveRequestData = async () => {
+			try {
+				const response = await fetch("/api/issues", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				const data = await response.json();
+
+				const result = Array.isArray(data) ? data : [data];
+				setLeaveRequest(result);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
+		};
+
+		fetchLeaveRequestData();
+	}, [snap.isFetch]);
+
 	return (
 		<ProtectedRoute>
 			<div className="flex h-screen bg-gray-200">
@@ -56,6 +82,23 @@ function page() {
 								<h1 className="font-extrabold capitalize text-[18px] mb-5">
 									Leave Record
 								</h1>
+								{leaveRequest.map((leaveRequest) => (
+									<div
+										key={leaveRequest.id}
+										className="bg-gray-100 p-4 mb-4 rounded"
+									>
+										<h2 className="text-lg font-bold">
+											{leaveRequest.leave_type}
+										</h2>
+										<p>
+											{leaveRequest.start_date} - {leaveRequest.end_date}
+										</p>
+										<p>{leaveRequest.reason}</p>
+										<p>Status: {leaveRequest.status}</p>
+										<p>Total Days: {leaveRequest.total_days}</p>
+										<p>Employee Name: {leaveRequest.employee_name}</p>
+									</div>
+								))}
 							</div>
 						</div>
 					</div>

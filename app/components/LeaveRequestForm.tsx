@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { format, differenceInDays, isBefore, isToday } from "date-fns";
 import { useForm } from "react-hook-form";
-
+import { useAuth } from "../context/AuthContext";
+import { store } from "../_store";
 enum Status {
 	OPEN = "OPEN",
 	APPROVED = "APPROVED",
@@ -18,10 +19,13 @@ enum LeaveType {
 }
 
 function LeaveRequestForm() {
+	const { user } = useAuth();
+	const [isSubmitting, setSubmitting] = useState(false);
 	const {
 		register,
 		handleSubmit,
 		watch,
+		reset,
 		setValue,
 		formState: { errors },
 		setError,
@@ -36,7 +40,7 @@ function LeaveRequestForm() {
 			reason: "",
 			comments: "Team notified via email",
 			total_days: 0,
-			employee_name: "Kenneth Villarin",
+			employee_name: user?.username,
 			user_id: 12,
 			approved_by_id: 5,
 			approved_by: {
@@ -125,8 +129,8 @@ function LeaveRequestForm() {
 	const minEndDate = watchStartDate || today;
 
 	const onSubmit = async (data: LeaveRequestForm) => {
-		console.log("Submitting data:", data);
 		try {
+			setSubmitting(true);
 			const response = await fetch("/api/issues", {
 				method: "POST",
 				headers: {
@@ -141,8 +145,42 @@ function LeaveRequestForm() {
 
 			const responseData = await response.json();
 			console.log("Form submitted successfully:", responseData);
+			store.isFetch = true;
+			setSubmitting(false);
+			reset({
+				id: 42,
+				status: Status.OPEN,
+				leave_type: LeaveType.DEFAULT,
+				start_date: "",
+				end_date: "",
+				reason: "",
+				comments: "Team notified via email",
+				total_days: 0,
+				employee_name: user?.username,
+				user_id: 12,
+				approved_by_id: 5,
+				approved_by: {
+					id: 5,
+					employee_id: "MGR-789",
+					full_name: "Jane Doe",
+					position: "Engineering Manager",
+					department: "Engineering",
+					employment_status: "Full-time",
+					shift_schedule: "9 AM - 5 PM",
+					immediate_supervisor: "CTO",
+					company_email: "jane.doe@company.com",
+					contact_number: "+1234567890",
+					employee_since: new Date("2020-01-15"),
+					address: "123 Management Ave, City",
+					role: "MANAGER",
+					created_at: new Date(),
+					updated_at: new Date(),
+				},
+			});
+
 			return responseData;
 		} catch (error) {
+			setSubmitting(false);
 			console.error("Error submitting form:", error);
 		}
 	};
@@ -268,9 +306,15 @@ function LeaveRequestForm() {
 
 				<button
 					type="submit"
-					className="mt-4 px-4 py-2 text-[14px] bg-zinc-950 text-white rounded focus:outline-none"
+					disabled={isSubmitting}
+					className="mt-4 px-4 py-2 text-[14px] bg-zinc-950 text-white rounded focus:outline-none flex gap-3 items-center"
 				>
-					Submit Leave Request
+					<h1>Submit Leave Request</h1>
+					{isSubmitting && (
+						<div className="flex justify-center items-center">
+							<div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+						</div>
+					)}
 				</button>
 			</form>
 		</div>
