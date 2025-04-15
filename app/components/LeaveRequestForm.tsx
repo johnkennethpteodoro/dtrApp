@@ -3,12 +3,18 @@ import React, { useEffect } from "react";
 import { format, differenceInDays, isBefore, isToday } from "date-fns";
 import { useForm } from "react-hook-form";
 
-interface LeaveRequestForm {
-	reason: string;
-	leaveType: string;
-	totalDays: number;
-	endDate: string;
-	startDate: string;
+enum Status {
+	OPEN = "OPEN",
+	APPROVED = "APPROVED",
+	REJECTED = "REJECTED",
+	CANCELLED = "CANCELLED",
+}
+enum LeaveType {
+	VACATION = "VACATION",
+	SICK = "SICK",
+	UNPAID = "UNPAID",
+	EMERGENCY = "EMERGENCY",
+	DEFAULT = "DEFAULT",
 }
 
 function LeaveRequestForm() {
@@ -22,17 +28,40 @@ function LeaveRequestForm() {
 		clearErrors,
 	} = useForm<LeaveRequestForm>({
 		defaultValues: {
+			id: 42, // Example ID
+			status: Status.OPEN,
+			leave_type: LeaveType.DEFAULT,
+			start_date: "",
+			end_date: "",
 			reason: "",
-			leaveType: "",
-			totalDays: 0,
-			endDate: "",
-			startDate: "",
+			comments: "Team notified via email",
+			total_days: 0,
+			employee_name: "Kenneth Villarin",
+			user_id: 12,
+			approved_by_id: 5,
+			approved_by: {
+				id: 5,
+				employee_id: "MGR-789",
+				full_name: "Jane Doe",
+				position: "Engineering Manager",
+				department: "Engineering",
+				employment_status: "Full-time",
+				shift_schedule: "9 AM - 5 PM",
+				immediate_supervisor: "CTO",
+				company_email: "jane.doe@company.com",
+				contact_number: "+1234567890",
+				employee_since: new Date("2020-01-15"),
+				address: "123 Management Ave, City",
+				role: "MANAGER",
+				created_at: new Date(),
+				updated_at: new Date(),
+			},
 		},
 	});
 
-	const watchStartDate = watch("startDate");
-	const watchEndDate = watch("endDate");
-	const watchLeaveType = watch("leaveType");
+	const watchStartDate = watch("start_date");
+	const watchEndDate = watch("end_date");
+	const watchLeaveType = watch("leave_type");
 
 	useEffect(() => {
 		if (watchStartDate && watchEndDate) {
@@ -41,9 +70,9 @@ function LeaveRequestForm() {
 
 			// Calculate total days (inclusive)
 			const days = differenceInDays(end, start) + 1;
-			setValue("totalDays", days > 0 ? days : 0);
+			setValue("total_days", days > 0 ? days : 0);
 		} else {
-			setValue("totalDays", 0);
+			setValue("total_days", 0);
 		}
 	}, [watchStartDate, watchEndDate, setValue]);
 
@@ -52,28 +81,29 @@ function LeaveRequestForm() {
 		const selectedDate = new Date(date);
 
 		if (
-			watchLeaveType === "vacation" &&
+			watchLeaveType === "VACATION" &&
 			isBefore(selectedDate, today) &&
 			!isToday(selectedDate)
 		) {
-			setError("startDate", {
+			setError("start_date", {
 				type: "manual",
 				message: "Vacation cannot be scheduled for past dates",
 			});
 			return false;
 		} else {
-			clearErrors("startDate");
+			clearErrors("start_date");
 			return true;
 		}
 	};
 
 	const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const date = e.target.value;
+
 		if (validateStartDate(date)) {
-			setValue("startDate", date);
+			setValue("start_date", date);
 
 			if (!watchEndDate || new Date(watchEndDate) < new Date(date)) {
-				setValue("endDate", date);
+				setValue("end_date", date);
 			}
 		}
 	};
@@ -81,10 +111,10 @@ function LeaveRequestForm() {
 	const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const date = e.target.value;
 		if (new Date(date) >= new Date(watchStartDate)) {
-			setValue("endDate", date);
-			clearErrors("endDate");
+			setValue("end_date", date);
+			clearErrors("end_date");
 		} else {
-			setError("endDate", {
+			setError("end_date", {
 				type: "manual",
 				message: "End date cannot be before start date",
 			});
@@ -95,6 +125,7 @@ function LeaveRequestForm() {
 	const minEndDate = watchStartDate || today;
 
 	const onSubmit = async (data: LeaveRequestForm) => {
+		console.log("Submitting data:", data);
 		try {
 			const response = await fetch("/api/issues", {
 				method: "POST",
@@ -122,23 +153,32 @@ function LeaveRequestForm() {
 				<h1 className="font-extrabold capitalize text-[18px] mb-5">Submit Leave Request</h1>
 
 				<div>
+					<input type="hidden" {...register("id")} />
+					<input type="hidden" {...register("status")} />
+					<input type="hidden" {...register("user_id")} />
+					<input type="hidden" {...register("employee_name")} />
+					<input type="hidden" {...register("approved_by_id")} />
+					<input type="hidden" {...register("comments")} />
+				</div>
+
+				<div>
 					<label className="block text-sm font-medium text-gray-700">
 						Leave Type <span className="text-red-500">*</span>
 					</label>
 					<select
 						className="select mt-1 block w-full pl-3 py-2 text-base border border-gray-300 focus:outline-none sm:text-sm"
-						{...register("leaveType", { required: "Leave type is required" })}
+						{...register("leave_type", { required: "Leave type is required" })}
 					>
-						<option value="" disabled>
+						<option value="DEFAULT" disabled>
 							Select leave Type
 						</option>
-						<option value="sick">Sick</option>
-						<option value="vacation">Vacation</option>
-						<option value="unpaid">Unpaid</option>
-						<option value="emergency">Emergency</option>
+						<option value="SICK">Sick</option>
+						<option value="VACATION">Vacation</option>
+						<option value="UNPAID">Unpaid</option>
+						<option value="EMERGENCY">Emergency</option>
 					</select>
-					{errors.leaveType && (
-						<p className="mt-1 text-sm text-red-600">{errors.leaveType.message}</p>
+					{errors.leave_type && (
+						<p className="mt-1 text-sm text-red-600">{errors.leave_type.message}</p>
 					)}
 				</div>
 
@@ -150,17 +190,17 @@ function LeaveRequestForm() {
 						<input
 							type="date"
 							id="startDate"
-							min={watchLeaveType === "vacation" ? today : undefined}
+							min={watchLeaveType === "VACATION" ? today : undefined}
 							className={`mt-1 block w-full px-3 py-2 border ${
-								errors.startDate ? "border-red-500" : "border-gray-300"
+								errors.start_date ? "border-red-500" : "border-gray-300"
 							} focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-							{...register("startDate", {
+							{...register("start_date", {
 								required: "Start date is required",
 								onChange: handleStartDateChange,
 							})}
 						/>
-						{errors.startDate && (
-							<p className="mt-1 text-sm text-red-600">{errors.startDate.message}</p>
+						{errors.start_date && (
+							<p className="mt-1 text-sm text-red-600">{errors.start_date.message}</p>
 						)}
 					</div>
 
@@ -176,15 +216,15 @@ function LeaveRequestForm() {
 							id="endDate"
 							min={minEndDate}
 							className={`mt-1 block w-full px-3 py-2 border ${
-								errors.endDate ? "border-red-500" : "border-gray-300"
+								errors.end_date ? "border-red-500" : "border-gray-300"
 							} focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-							{...register("endDate", {
+							{...register("end_date", {
 								required: "End date is required",
 								onChange: handleEndDateChange,
 							})}
 						/>
-						{errors.endDate && (
-							<p className="mt-1 text-sm text-red-600">{errors.endDate.message}</p>
+						{errors.end_date && (
+							<p className="mt-1 text-sm text-red-600">{errors.end_date.message}</p>
 						)}
 					</div>
 
@@ -200,7 +240,7 @@ function LeaveRequestForm() {
 							min="0"
 							className="mt-1 block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
 							disabled
-							{...register("totalDays")}
+							{...register("total_days")}
 						/>
 						{watchStartDate && watchEndDate && watchStartDate && watchEndDate && (
 							<p className="text-xs text-gray-500 mt-1">

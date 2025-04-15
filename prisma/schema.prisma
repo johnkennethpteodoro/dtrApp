@@ -14,17 +14,63 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Issue {
-    id          Int      @id @default(autoincrement())
-    title       String   @db.VarChar(255)
-    description String   @db.Text
-    status      Status   @default(OPEN)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+model User {
+    id                   Int      @id @default(autoincrement())
+    employee_id          String   @unique @db.VarChar(20)
+    full_name            String   @db.VarChar(100)
+    position             String   @db.VarChar(50)
+    department           String   @db.VarChar(50)
+    employment_status    String   @db.VarChar(20)
+    shift_schedule       String   @db.VarChar(20)
+    immediate_supervisor String   @db.VarChar(100)
+    company_email        String   @unique @db.VarChar(100)
+    contact_number       String   @db.VarChar(20)
+    employee_since       DateTime
+    address              String   @db.VarChar(200)
+    role                 Role     @default(EMPLOYEE)
+
+    // Relations (kept as PascalCase in Prisma)
+    approved_requests LeaveRequest[] @relation("approved_requests")
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+model LeaveRequest {
+    id            Int       @id @default(autoincrement())
+    status        Status    @default(OPEN)
+    leave_type    LeaveType
+    start_date    String    @db.VarChar(500)
+    end_date      String    @db.VarChar(500)
+    reason        String    @db.VarChar(500)
+    created_at    DateTime  @default(now())
+    updated_at    DateTime  @updatedAt
+    comments      String?   @db.VarChar(1000)
+    total_days    Int
+    employee_name String    @db.VarChar(500)
+    user_id       Int
+
+    approved_by    User? @relation(name: "approved_requests", fields: [approved_by_id], references: [id])
+    approved_by_id Int?
 }
 
 enum Status {
     OPEN
-    IN_PROGRESS
-    CLOSED
+    APPROVED
+    REJECTED
+    CANCELLED
+}
+
+enum LeaveType {
+    VACATION
+    SICK
+    UNPAID
+    EMERGENCY
+}
+
+enum Role {
+    EMPLOYEE
+    MANAGER
+    HR
+    ADMIN
 }

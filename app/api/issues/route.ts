@@ -5,8 +5,13 @@ import { PrismaClient } from "../../generated/prisma";
 const prisma = new PrismaClient();
 
 const createIssueSchema = z.object({
-	title: z.string().min(1).max(255),
-	description: z.string().min(1),
+	leave_type: z.enum(["VACATION", "SICK", "UNPAID", "EMERGENCY"]),
+	start_date: z.string().min(1),
+	end_date: z.string().min(1),
+	reason: z.string().min(1),
+	total_days: z.number().min(1),
+	employee_name: z.string().min(1),
+	user_id: z.number(),
 });
 
 export async function POST(request: NextRequest) {
@@ -17,10 +22,16 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json(validation.error.errors, { status: 400 });
 		}
 
-		const newIssue = await prisma.issue.create({
+		const newIssue = await prisma.leaveRequest.create({
 			data: {
-				title: body.title,
-				description: body.description,
+				leave_type: body.leave_type,
+				start_date: body.start_date,
+				end_date: body.end_date,
+				reason: body.reason,
+				status: body.status,
+				total_days: body.total_days,
+				employee_name: body.employee_name,
+				user_id: body.user_id,
 			},
 		});
 

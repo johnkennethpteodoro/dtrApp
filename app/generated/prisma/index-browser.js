@@ -107,27 +107,73 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.IssueScalarFieldEnum = {
+exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  title: 'title',
-  description: 'description',
+  employee_id: 'employee_id',
+  full_name: 'full_name',
+  position: 'position',
+  department: 'department',
+  employment_status: 'employment_status',
+  shift_schedule: 'shift_schedule',
+  immediate_supervisor: 'immediate_supervisor',
+  company_email: 'company_email',
+  contact_number: 'contact_number',
+  employee_since: 'employee_since',
+  address: 'address',
+  role: 'role',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.LeaveRequestScalarFieldEnum = {
+  id: 'id',
   status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  leave_type: 'leave_type',
+  start_date: 'start_date',
+  end_date: 'end_date',
+  reason: 'reason',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  comments: 'comments',
+  total_days: 'total_days',
+  employee_name: 'employee_name',
+  user_id: 'user_id',
+  approved_by_id: 'approved_by_id'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Role = exports.$Enums.Role = {
+  EMPLOYEE: 'EMPLOYEE',
+  MANAGER: 'MANAGER',
+  HR: 'HR',
+  ADMIN: 'ADMIN'
+};
+
 exports.Status = exports.$Enums.Status = {
   OPEN: 'OPEN',
-  IN_PROGRESS: 'IN_PROGRESS',
-  CLOSED: 'CLOSED'
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.LeaveType = exports.$Enums.LeaveType = {
+  VACATION: 'VACATION',
+  SICK: 'SICK',
+  UNPAID: 'UNPAID',
+  EMERGENCY: 'EMERGENCY'
 };
 
 exports.Prisma.ModelName = {
-  Issue: 'Issue'
+  User: 'User',
+  LeaveRequest: 'LeaveRequest'
 };
 
 /**
