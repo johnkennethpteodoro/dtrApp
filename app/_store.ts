@@ -1,11 +1,11 @@
 import { proxy } from "valtio";
 
 interface Store {
-	isFetch: boolean;
+	isFetched: boolean;
 }
 
 const store = proxy<Store>({
-	isFetch: false,
+	isFetched: false,
 });
 
 export { store };

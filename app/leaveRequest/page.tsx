@@ -4,32 +4,26 @@ import Header from "../components/Header";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SideBar from "../components/SideBar";
 import LeaveRequestForm from "../components/LeaveRequestForm";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSnapshot } from "valtio";
 import { store } from "../_store";
 function page() {
 	const snap = useSnapshot(store);
 	const [leaveRequest, setLeaveRequest] = useState<any[]>([]);
+
+	const fetchLeaveRequests = useCallback(async () => {
+		try {
+			const response = await fetch("/api/issues");
+			const data = await response.json();
+			setLeaveRequest(Array.isArray(data) ? data : [data]);
+		} catch (error) {
+			console.error("Error fetching data:", error);
+		}
+	}, []);
+
 	useEffect(() => {
-		const fetchLeaveRequestData = async () => {
-			try {
-				const response = await fetch("/api/issues", {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
-				const data = await response.json();
-
-				const result = Array.isArray(data) ? data : [data];
-				setLeaveRequest(result);
-			} catch (error) {
-				console.error("Error fetching data:", error);
-			}
-		};
-
-		fetchLeaveRequestData();
-	}, [snap.isFetch]);
+		fetchLeaveRequests();
+	}, [snap.isFetched, fetchLeaveRequests]);
 
 	return (
 		<ProtectedRoute>
@@ -83,34 +77,41 @@ function page() {
 								<div className="flex justify-between items-center bg-zinc-950 px-4 py-3 text-white">
 									<h1 className="font-bold">Leave Record</h1>
 									<button className="bg-white text-black text-[12px] w-[115px] py-1.5">
-										Select Month
+										Filter
 									</button>
 								</div>
-								<table className="w-full  bg-white border border-zinc-200">
+								<table className="w-full  bg-white ">
 									<thead>
-										<tr className="text-gray-400 text-left">
-											<th className="text-[14px] font-medium text-left md:pl-5 xl:pl-8 pl-2 py-2 pt-4">
+										<tr className="text-black text-left">
+											<th className="text-[14px] font-semibold md:pl-5 xl:pl-8 pl-2 text-left py-2 pt-5">
 												Leave Type
 											</th>
-											<th className="text-[14px] md:pl-5 xl:pl-8 pl-2 font-medium  py-2 pt-4">
+											<th className="text-[14px] md:pl-5 font-semibold xl:pl-8 pl-2 text-left py-2 pt-5">
 												Status
 											</th>
-											<th className="text-[14px] md:pl-5 xl:pl-8 pl-2 font-medium py-2 pt-4">
+											<th className="text-[14px] md:pl-5 font-semibold xl:pl-8 pl-2 text-left py-2 pt-5">
 												Action
 											</th>
 										</tr>
 									</thead>
 									<tbody className="align-top">
-										{leaveRequest.map((leaveRequest) => (
+										{leaveRequest.map((leaveRequest, index) => (
 											<tr
 												key={leaveRequest.id}
-												className="border-b border-zinc-200"
+												className={`border-b border-zinc-200  ${
+													index === leaveRequest.length - 1
+														? "border-b-0"
+														: ""
+												}`}
 											>
-												<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 capitalize text-[13px]">
-													{leaveRequest.leave_type.toLowerCase()}
+												<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 capitalize text-[13px] ">
+													{leaveRequest.leave_type.toLowerCase()} Leave
 												</td>
 												<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 tracking-wider ">
-													<button className="bg-yellow-400 py-1 px-3 text-white text-[11px] capitalize">
+													<button className="bg-yellow-500/40 capitalize py-0.5 -tracking-wider flex gap-1 items-center  justify-start px-3  rounded-full text-[12px] text-yellow-700">
+														<div
+															className={`w-1.5 h-1.5 rounded-full bg-yellow-700`}
+														></div>
 														{leaveRequest.status === "OPEN"
 															? "Pending"
 															: leaveRequest.status.toLowerCase()}

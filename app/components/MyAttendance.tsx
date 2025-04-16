@@ -18,7 +18,7 @@ const formatDate = (dateString: string) => {
 	});
 };
 
-const MyAttendance: React.FC = () => {
+function MyAttendance() {
 	const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const recordsPerPage: number = 10;
@@ -50,8 +50,20 @@ const MyAttendance: React.FC = () => {
 
 	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+	const getTimeStatus = (timeStr: string) => {
+		const expectedHour = 8;
+		const timeInDate = new Date(`1970-01-01 ${timeStr}`);
+		const hours = timeInDate.getHours();
+
+		if (hours > expectedHour)
+			return { status: "Not on time", class: "bg-red-500/40 text-red-900 font-meduim" };
+		else if (hours < expectedHour)
+			return { status: "Early", class: "bg-yellow-500/40 text-yellow-700 font-meduim" };
+		else return { status: "On Time", class: "bg-green-500" };
+	};
+
 	return (
-		<div className="bg-white h-full pb-5 shadow">
+		<div className="bg-white h-[580px] pb-5 shadow">
 			<div className="flex justify-between w-full bg-zinc-900 py-4 px-5 items-center">
 				<h1 className="text-white font-bold text-lg">My Attendance</h1>
 				<button
@@ -79,15 +91,18 @@ const MyAttendance: React.FC = () => {
 
 			<table className="w-full p-8 bg-white">
 				<thead>
-					<tr className="text-gray-400 text-left">
-						<th className="text-[15px] font-medium md:pl-5 xl:pl-8 pl-2 text-left py-2 pt-5">
+					<tr className="text-black text-left">
+						<th className="text-[14px] font-semibold md:pl-5 xl:pl-8 pl-2 text-left py-2 pt-5">
 							Date
 						</th>
-						<th className="text-[15px] md:pl-5 font-medium xl:pl-8 pl-2 text-left py-2 pt-5">
+						<th className="text-[14px] md:pl-5 font-semibold xl:pl-8 pl-2 text-left py-2 pt-5">
 							Time In
 						</th>
-						<th className="text-[15px] md:pl-5 font-medium xl:pl-8 pl-2 text-left py-2 pt-5">
+						<th className="text-[14px] md:pl-5 font-semibold xl:pl-8 pl-2 text-left py-2 pt-5">
 							Time Out
+						</th>
+						<th className="text-[14px] md:pl-5 font-semibold xl:pl-8 pl-2 text-left py-2 pt-5">
+							Status
 						</th>
 					</tr>
 				</thead>
@@ -102,11 +117,23 @@ const MyAttendance: React.FC = () => {
 							<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2">
 								{formatDate(record.date)}
 							</td>
-							<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 tracking-wider">
-								{record.timeIn}
-							</td>
-							<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 tracking-wider">
+							<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2">{record.timeIn}</td>
+							<td className="text-left xl:pl-8 md:pl-5 pl-2 py-2 ">
 								{record.timeOut || "-"}
+							</td>
+							<td className={`text-left xl:pl-8 md:pl-5 pl-2 py-2  `}>
+								<button
+									className={`py-0.5 -tracking-wider flex gap-1 items-center  justify-start px-3  rounded-full text-[12px] ${
+										getTimeStatus(record.timeIn).class
+									}`}
+								>
+									<div
+										className={`w-1.5 h-1.5 rounded-full   ${
+											getTimeStatus(record.timeIn).class
+										}`}
+									></div>
+									{getTimeStatus(record.timeIn).status}
+								</button>
 							</td>
 						</tr>
 					))}
@@ -135,6 +162,6 @@ const MyAttendance: React.FC = () => {
 			)}
 		</div>
 	);
-};
+}
 
 export default MyAttendance;

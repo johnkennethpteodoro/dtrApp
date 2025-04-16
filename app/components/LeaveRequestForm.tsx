@@ -143,42 +143,10 @@ function LeaveRequestForm() {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 
-			const responseData = await response.json();
-			console.log("Form submitted successfully:", responseData);
-			store.isFetch = true;
+			store.isFetched = !store.isFetched;
+			await response.json();
 			setSubmitting(false);
-			reset({
-				id: 42,
-				status: Status.OPEN,
-				leave_type: LeaveType.DEFAULT,
-				start_date: "",
-				end_date: "",
-				reason: "",
-				comments: "Team notified via email",
-				total_days: 0,
-				employee_name: user?.username,
-				user_id: 12,
-				approved_by_id: 5,
-				approved_by: {
-					id: 5,
-					employee_id: "MGR-789",
-					full_name: "Jane Doe",
-					position: "Engineering Manager",
-					department: "Engineering",
-					employment_status: "Full-time",
-					shift_schedule: "9 AM - 5 PM",
-					immediate_supervisor: "CTO",
-					company_email: "jane.doe@company.com",
-					contact_number: "+1234567890",
-					employee_since: new Date("2020-01-15"),
-					address: "123 Management Ave, City",
-					role: "MANAGER",
-					created_at: new Date(),
-					updated_at: new Date(),
-				},
-			});
-
-			return responseData;
+			reset();
 		} catch (error) {
 			setSubmitting(false);
 			console.error("Error submitting form:", error);

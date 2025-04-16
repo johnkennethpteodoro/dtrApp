@@ -3,23 +3,6 @@ import { z } from "zod";
 import { PrismaClient } from "../../generated/prisma";
 const prisma = new PrismaClient();
 
-export async function GET() {
-	try {
-		const leaveRequests = await prisma.leaveRequest.findMany({
-			orderBy: {
-				created_at: "desc",
-			},
-		});
-
-		return NextResponse.json(leaveRequests, { status: 200 });
-	} catch (error) {
-		console.error("API Error:", error);
-		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-	} finally {
-		await prisma.$disconnect();
-	}
-}
-
 const createIssueSchema = z.object({
 	leave_type: z.enum(["VACATION", "SICK", "UNPAID", "EMERGENCY"]),
 	start_date: z.string().min(1),
@@ -52,6 +35,23 @@ export async function POST(request: NextRequest) {
 		});
 
 		return NextResponse.json(newIssue, { status: 201 });
+	} catch (error) {
+		console.error("API Error:", error);
+		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+	} finally {
+		await prisma.$disconnect();
+	}
+}
+
+export async function GET() {
+	try {
+		const leaveRequests = await prisma.leaveRequest.findMany({
+			orderBy: {
+				created_at: "desc",
+			},
+		});
+
+		return NextResponse.json(leaveRequests, { status: 200 });
 	} catch (error) {
 		console.error("API Error:", error);
 		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
