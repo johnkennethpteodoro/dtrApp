@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-* {
+/* * {
 	border: 1px solid red;
-}
+} */
 
 .shadow {
 	box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;

@@ -9,8 +9,7 @@ interface ModalProps {
 	shouldTimeIn: string | boolean | undefined;
 	onConfirm: () => void;
 }
-
-const Modal = ({ isOpen, onClose, children, title, shouldTimeIn, onConfirm }: ModalProps) => {
+function Modal({ isOpen, onClose, children, title, shouldTimeIn, onConfirm }: ModalProps) {
 	useEffect(() => {
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -80,6 +79,6 @@ const Modal = ({ isOpen, onClose, children, title, shouldTimeIn, onConfirm }: Mo
 			</div>
 		</div>
 	);
-};
+}
 
 export default Modal;

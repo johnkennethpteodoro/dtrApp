@@ -1,9 +1,13 @@
 "use client";
+import React, { useState } from "react";
 import Image from "next/image";
-import React from "react";
 import { useAuth } from "../context/AuthContext";
+import EditProfileModal from "./EditProfileModal";
 function Profile() {
 	const { user } = useAuth();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const handleEditProfile = () => {};
 	return (
 		<>
 			<div className="grid grid-cols-1 xl:grid-cols-3 gap-5 m-5">
@@ -33,13 +37,24 @@ function Profile() {
 							</h1>
 							<p className="text-[13px] text-zinc-500">Software Engineer</p>
 							<div className="mt-3 flex gap-2">
-								<button className="bg-zinc-950 text-white text-[13px] w-[145px] py-1.5">
+								<button
+									onClick={() => setIsModalOpen(true)}
+									className="bg-zinc-950 text-white text-[13px] w-[145px] py-1.5"
+								>
 									Edit Profile
 								</button>
 								<button className="bg-zinc-950 text-white text-[13px] w-[145px] py-1.5">
 									Change Password
 								</button>
 							</div>
+							<EditProfileModal
+								isOpen={isModalOpen}
+								onClose={() => setIsModalOpen(false)}
+								title="Edit Profile"
+								onConfirm={handleEditProfile}
+							>
+								<p className="text-gray-600">Are you sure you want to</p>
+							</EditProfileModal>
 						</div>
 
 						<div className="px-8 mt-[30px]">
