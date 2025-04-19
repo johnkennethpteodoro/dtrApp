@@ -131,7 +131,7 @@ function LeaveRequestForm() {
 	const onSubmit = async (data: LeaveRequestForm) => {
 		try {
 			setSubmitting(true);
-			const response = await fetch("/api/issues", {
+			const response = await fetch("/api/leave_request", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

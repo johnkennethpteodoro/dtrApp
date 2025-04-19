@@ -13,7 +13,7 @@ function page() {
 
 	const fetchLeaveRequests = useCallback(async () => {
 		try {
-			const response = await fetch("/api/issues");
+			const response = await fetch("/api/leave_request");
 			const data = await response.json();
 			setLeaveRequest(Array.isArray(data) ? data : [data]);
 		} catch (error) {
